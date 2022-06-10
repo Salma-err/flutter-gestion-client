@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gestion_app/main.dart';
-import 'package:gestion_app/model/client.dart';
-import 'package:gestion_app/pages/add_client.dart';
-import 'package:gestion_app/provider/clients_provider.dart';
-import 'package:gestion_app/widget/list_client_widget.dart';
-import 'package:gestion_app/widget/my_search_delegate.dart';
+import 'package:gestion_app/models/client.dart';
+import 'package:gestion_app/views/CRUD_forms/add_client.dart';
+import 'package:gestion_app/controllers/clients_provider.dart';
+import 'package:gestion_app/views/clientWidgets/list_client_widget.dart';
+import 'package:gestion_app/views/CRUD_forms/my_search_delegate_clients.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomeClient extends StatefulWidget {
+  const HomeClient({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeClient> createState() => _HomeClientState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeClientState extends State<HomeClient> {
   late List<Client> activeClients;
   late List<Client> inactiveClients;
   late List<Client> clients;
@@ -51,16 +51,16 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
           foregroundColor: Colors.white,
-          title: Text(MyApp.title,
+          title: Text(MyApp.titleClient,
               style: const TextStyle(
-                  letterSpacing: 3, wordSpacing: 2, fontSize: 25)),
+                  letterSpacing: 2, wordSpacing: 1, fontSize: 20)),
           backgroundColor: Theme.of(context).primaryColor,
           actions: [
             IconButton(
               onPressed: () {
                 showSearch(
                     context: context,
-                    delegate: MySearchDelegate(clients: clients));
+                    delegate: MySearchDelegateClient(clients: clients));
               },
               icon: const Icon(Icons.search),
               //iconSize: 35,
@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color.fromRGBO(220, 215, 176, 1),
         unselectedItemColor: Colors.white.withOpacity(0.7),
-        selectedItemColor: Color.fromRGBO(2, 69, 64, 1),
+        selectedItemColor: const Color.fromRGBO(2, 69, 64, 1),
         currentIndex: selectedIndex,
         onTap: (index) => setState(() {
           selectedIndex = index;

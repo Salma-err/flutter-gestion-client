@@ -1,46 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:gestion_app/model/client.dart';
-import 'package:gestion_app/provider/clients_provider.dart';
+import 'package:gestion_app/models/client.dart';
+import 'package:gestion_app/controllers/clients_provider.dart';
 import 'package:provider/provider.dart';
 
-class EditClient extends StatefulWidget {
-  final Client client;
-  const EditClient({Key? key, required this.client}) : super(key: key);
+class AddClient extends StatefulWidget {
+  const AddClient({Key? key}) : super(key: key);
 
   @override
-  State<EditClient> createState() => _EditClientState();
+  State<AddClient> createState() => _AddClientState();
 }
 
-class _EditClientState extends State<EditClient> {
+class _AddClientState extends State<AddClient> {
   final _formKey = GlobalKey<FormState>();
   final _controllerNom = TextEditingController();
   final _controllerPrenom = TextEditingController();
   final _controllerCode = TextEditingController();
   final _controllerTel = TextEditingController();
   final _controllerMail = TextEditingController();
-  //variable
   bool isChecked = false;
-  int id = 0;
-
-  @override
-  void initState() {
-    _controllerNom.text = widget.client.nom;
-    _controllerPrenom.text = widget.client.prenom;
-    _controllerCode.text = widget.client.code;
-    _controllerTel.text = widget.client.tel;
-    _controllerMail.text = widget.client.mail;
-    isChecked = widget.client.verified;
-    id = widget.client.id;
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Editer un Client'),
+        title: const Text('Ajouter un Client'),
         backgroundColor: Theme.of(context).primaryColor,
+        foregroundColor: Colors.white,
       ),
       body: Container(
         padding: const EdgeInsets.all(30),
@@ -64,11 +49,15 @@ class _EditClientState extends State<EditClient> {
                     }),
                 const SizedBox(height: 8),
                 TextFormField(
-                    controller: _controllerPrenom,
+                    style: const TextStyle(
+                      color: Color.fromRGBO(2, 69, 64, 1),
+                    ),
                     decoration: const InputDecoration(
+                      focusColor: Color.fromRGBO(2, 69, 64, 1),
                       border: UnderlineInputBorder(),
                       labelText: 'Prenom',
                     ),
+                    controller: _controllerPrenom,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Le champs Prénom est obligatoire';
@@ -142,9 +131,10 @@ class _EditClientState extends State<EditClient> {
                 ),
                 const SizedBox(height: 16),
                 SizedBox(
+                  height: 40,
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () => editClient(),
+                    onPressed: () => createNewClient(),
                     child: const Text(
                       'Enregistrer',
                       style: TextStyle(
@@ -169,27 +159,22 @@ class _EditClientState extends State<EditClient> {
     );
   }
 
-  editClient() {
+  createNewClient() async {
     final isValid = _formKey.currentState?.validate();
     final provider = Provider.of<ClientsProvider>(context, listen: false);
+
     if (!isValid!) {
       return;
     } else {
-      Client cl = Client(
-          id: id,
+      Client client = Client(
+          id: 1,
           nom: _controllerNom.text,
           prenom: _controllerPrenom.text,
           code: _controllerCode.text,
           tel: _controllerTel.text,
           mail: _controllerMail.text,
           verified: isChecked);
-
-      provider.editClient(cl);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Très Bien, le client est bien mis à jour !'),
-        duration: Duration(seconds: 2),
-      ));
-      Navigator.of(context).pop();
+      provider.addClient(context, client);
     }
   }
 }

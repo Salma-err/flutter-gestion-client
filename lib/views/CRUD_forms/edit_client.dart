@@ -1,30 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:gestion_app/model/client.dart';
-import 'package:gestion_app/provider/clients_provider.dart';
-import 'package:gestion_app/utils.dart';
+import 'package:gestion_app/models/client.dart';
+import 'package:gestion_app/controllers/clients_provider.dart';
 import 'package:provider/provider.dart';
 
-class AddClient extends StatefulWidget {
-  const AddClient({Key? key}) : super(key: key);
+class EditClient extends StatefulWidget {
+  final Client client;
+  const EditClient({Key? key, required this.client}) : super(key: key);
 
   @override
-  State<AddClient> createState() => _AddClientState();
+  State<EditClient> createState() => _EditClientState();
 }
 
-class _AddClientState extends State<AddClient> {
+class _EditClientState extends State<EditClient> {
   final _formKey = GlobalKey<FormState>();
   final _controllerNom = TextEditingController();
   final _controllerPrenom = TextEditingController();
   final _controllerCode = TextEditingController();
   final _controllerTel = TextEditingController();
   final _controllerMail = TextEditingController();
+  //variable
   bool isChecked = false;
+  int id = 0;
+
+  @override
+  void initState() {
+    _controllerNom.text = widget.client.nom;
+    _controllerPrenom.text = widget.client.prenom;
+    _controllerCode.text = widget.client.code;
+    _controllerTel.text = widget.client.tel;
+    _controllerMail.text = widget.client.mail;
+    isChecked = widget.client.verified;
+    id = widget.client.id;
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ajouter un Client'),
+        title: const Text('Editer un Client'),
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Colors.white,
       ),
@@ -50,15 +65,11 @@ class _AddClientState extends State<AddClient> {
                     }),
                 const SizedBox(height: 8),
                 TextFormField(
-                    style: const TextStyle(
-                      color: Color.fromRGBO(2, 69, 64, 1),
-                    ),
+                    controller: _controllerPrenom,
                     decoration: const InputDecoration(
-                      focusColor: Color.fromRGBO(2, 69, 64, 1),
                       border: UnderlineInputBorder(),
                       labelText: 'Prenom',
                     ),
-                    controller: _controllerPrenom,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Le champs Prénom est obligatoire';
@@ -132,10 +143,9 @@ class _AddClientState extends State<AddClient> {
                 ),
                 const SizedBox(height: 16),
                 SizedBox(
-                  height: 40,
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () => createNewClient(),
+                    onPressed: () => editClient(),
                     child: const Text(
                       'Enregistrer',
                       style: TextStyle(
@@ -160,27 +170,22 @@ class _AddClientState extends State<AddClient> {
     );
   }
 
-  createNewClient() async {
+  editClient() {
     final isValid = _formKey.currentState?.validate();
     final provider = Provider.of<ClientsProvider>(context, listen: false);
-
     if (!isValid!) {
       return;
     } else {
-      Client client = Client(
-          id: 1,
+      Client cl = Client(
+          id: id,
           nom: _controllerNom.text,
           prenom: _controllerPrenom.text,
           code: _controllerCode.text,
           tel: _controllerTel.text,
           mail: _controllerMail.text,
           verified: isChecked);
-      provider.addClient(client);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Magnifique, le nouveau client est bien ajouté !'),
-        duration: Duration(seconds: 2),
-      ));
-      Navigator.of(context).pop();
+
+      provider.editClient(context, cl);
     }
   }
 }

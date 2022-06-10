@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gestion_app/model/client.dart';
-import 'package:gestion_app/widget/search_list_client_widget.dart';
+import 'package:gestion_app/views/CRUD_forms/search_list_chambre_widget.dart';
+import 'package:gestion_app/models/chambre.dart';
 
-class MySearchDelegate extends SearchDelegate {
-  List<Client> clients = [];
-  MySearchDelegate({required this.clients});
-
-  @override
-  Widget? buildLeading(BuildContext context) => IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () => close(context, null),
-      );
+class MySearchDelegateChambre extends SearchDelegate {
+  List<Chambre> chambres = [];
+  MySearchDelegateChambre({required this.chambres});
 
   @override
   List<Widget>? buildActions(BuildContext context) => [
@@ -27,13 +21,19 @@ class MySearchDelegate extends SearchDelegate {
       ];
 
   @override
+  Widget? buildLeading(BuildContext context) => IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () => close(context, null),
+      );
+
+  @override
   Widget buildResults(BuildContext context) {
-    List<Client> list = [];
+    List<Chambre> list = [];
 
     if (query.isNotEmpty) {
-      list = Client.searchByName(clients, query);
+      list = Chambre.searchByNumero(chambres, int.parse(query));
       if (list.isNotEmpty) {
-        return SearchListClientWidget(clients: list, query: query);
+        return SearchListChambreWidget(chambres: list, query: int.parse(query));
       } else {
         return const Center(
           child: Text('Pas de résultat !'),
@@ -41,7 +41,10 @@ class MySearchDelegate extends SearchDelegate {
       }
     } else {
       return const Center(
-        child: Text('Entrez un nom ou un prénom '),
+        child: Text(
+          'Entrez un numéro !',
+          textAlign: TextAlign.center,
+        ),
       );
     }
   }

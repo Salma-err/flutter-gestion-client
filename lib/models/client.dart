@@ -35,34 +35,34 @@ class Client {
 
   static getActiveClients(List<Client> list) {
     List<Client> clients = [];
-    list.forEach((element) {
+    for (var element in list) {
       if (element.verified.toString() == 'true') {
         clients.add(element);
       }
-    });
+    }
     return clients;
   }
 
   static getInactiveClients(List<Client> list) {
     List<Client> clients = [];
-    list.forEach((element) {
+    for (var element in list) {
       if (element.verified.toString() != 'true') {
         clients.add(element);
       }
-    });
+    }
     return clients;
   }
 
   static searchByName(List<Client> list, String? nomComplet) {
     List<Client> clients = [];
-    list.forEach((element) {
+    for (var element in list) {
       String nomC = element.nom + ' ' + element.prenom;
       if (nomComplet != null) {
         if (nomC.toLowerCase().contains(nomComplet.toLowerCase())) {
           clients.add(element);
         }
       }
-    });
+    }
     return clients;
   }
 }

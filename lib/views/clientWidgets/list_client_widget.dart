@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:gestion_app/model/client.dart';
-import 'package:gestion_app/widget/client_widget.dart';
+import 'package:gestion_app/controllers/reservations_controller.dart';
+import 'package:gestion_app/models/client.dart';
+import 'package:gestion_app/views/clientWidgets/client_widget.dart';
+import 'package:get/get.dart';
 
 class ListClientWidget extends StatelessWidget {
-  const ListClientWidget({Key? key, required this.clients}) : super(key: key);
+  ListClientWidget({Key? key, required this.clients}) : super(key: key);
+  final controller = Get.put(ReservationsController());
   final List<Client> clients;
 
   @override

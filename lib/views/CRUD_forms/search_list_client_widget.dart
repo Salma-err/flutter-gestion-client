@@ -1,9 +1,9 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:gestion_app/model/client.dart';
-import 'package:gestion_app/provider/clients_provider.dart';
-import 'package:gestion_app/widget/client_widget.dart';
+import 'package:gestion_app/models/client.dart';
+import 'package:gestion_app/controllers/clients_provider.dart';
+import 'package:gestion_app/views/clientWidgets/client_widget.dart';
 import 'package:provider/provider.dart';
 
 class SearchListClientWidget extends StatefulWidget {

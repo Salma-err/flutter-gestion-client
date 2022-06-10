@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../model/client.dart';
+import '../../models/client.dart';
 
 class DetailsClient extends StatelessWidget {
   final Client client;
