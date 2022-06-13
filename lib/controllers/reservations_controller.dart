@@ -143,6 +143,7 @@ class ReservationsController extends GetxController {
   getChambres(BuildContext context, DateTime db, DateTime df) {
     var freeRooms = <int>[];
     var reservedRoom = <int>[];
+    var removedItems = <int>[];
 
     //getting rooms data from provider
     var provider = Provider.of<ChambresProvider>(context);
@@ -174,11 +175,14 @@ class ReservationsController extends GetxController {
     print("freeRooms: $freeRooms");
     print("reservedRooms: $reservedRoom");
     print('rooms : $rooms');
+
     for (var room in freeRooms) {
       if (reservedRoom.contains(room)) {
-        freeRooms.remove(room);
+        removedItems.add(room);
       }
     }
+    freeRooms.removeWhere((room) => removedItems.contains(room));
+
     for (var room in rooms) {
       if (!reservedRoom.contains(room.numero) &&
           !freeRooms.contains(room.numero)) {
